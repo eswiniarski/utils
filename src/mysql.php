@@ -9,18 +9,21 @@ namespace ES\Utils;
 class MySql {
     protected $dbConnection;
 
-    public function __construct($dbServer, $dbUser, $dbPassword, $dbName) {
-        $$this->dbConnection=  mysqli_connect($dbServer, $dbUser, $dbPassword, $dbName);
+    public function __construct($dbServer, $dbUser, $dbPassword, $dbName, $driver = 'mysql') {
+        try {
+            $this->dbConnection = new PDO($driver . ':host='.$dbServer.';dbname=' . $dbName, $dbUser, $dbPassword);
+            return $this;
+        } catch (PDOException $e){
+            return false;
+        }
     }
 
-    public function __destruct() {
-        mysqli_close($this->dbConnection);
-    }
+    public function query($querySring, $params = []) {
+        $sth = $connec->prepare($querySring, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute($params);
+        $c = $sth->fetchAll();
 
-    public function query($sqlQuerySring) {
-        $result = mysqli_query($this->dbConnection, $sqlQuerySring);
-        $rows = mysqli_fetch_assoc($result);
-        mysqli_free_result($result);
+        print_r($c);
     }
     
 }
