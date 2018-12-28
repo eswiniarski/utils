@@ -23,7 +23,7 @@ class CSV {
         if ($handle) {
             while (($row = fgetcsv($handle)) !== false) {        
                 if (empty($headers)) {
-                    $headers = $row;filePath
+                    $headers = $row;
                     continue;
                 }
 
